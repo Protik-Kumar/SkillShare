@@ -1,0 +1,6 @@
+{
+  "name": "SkillShare – Skill-Based Hiring Platform",
+  "description": "Connect, showcase expertise, and hire skilled professionals for tasks and projects with escrow payments and AI matching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

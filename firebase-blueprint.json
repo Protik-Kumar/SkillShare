@@ -1,0 +1,334 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account authentication and wallet information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "currentMode": { "type": "string", "enum": ["freelancer", "client", "admin"] },
+        "isSuspended": { "type": "boolean" },
+        "isVerified": { "type": "boolean" },
+        "walletBalance": { "type": "number" },
+        "pendingEscrowBalance": { "type": "number" },
+        "totalEarned": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "displayName", "role"]
+    },
+    "Profile": {
+      "title": "Profile",
+      "description": "User public skill and client profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "headline": { "type": "string", "maxLength": 150 },
+        "bio": { "type": "string", "maxLength": 2000 },
+        "location": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "skills": { "type": "array" },
+        "skillLevel": { "type": "string", "enum": ["Beginner", "Intermediate", "Expert"] },
+        "hourlyRate": { "type": "number" },
+        "education": { "type": "array" },
+        "experience": { "type": "array" },
+        "portfolio": { "type": "array" },
+        "socialLinks": { "type": "object" },
+        "availability": { "type": "string", "enum": ["Available", "Busy", "Not Available"] },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "completedJobs": { "type": "number" },
+        "completionPercentage": { "type": "number" }
+      },
+      "required": ["uid", "name"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "Job or project posted by a client",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "clientId": { "type": "string", "maxLength": 128 },
+        "clientName": { "type": "string", "maxLength": 100 },
+        "clientAvatar": { "type": "string", "maxLength": 500 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 5000 },
+        "requiredSkills": { "type": "array" },
+        "budget": { "type": "number" },
+        "deadline": { "type": "string", "maxLength": 50 },
+        "proposalsCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["open", "in_progress", "completed", "cancelled", "flagged"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "clientId", "title", "category", "budget", "status"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "Skill gig or service offered by a freelancer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "freelancerId": { "type": "string", "maxLength": 128 },
+        "freelancerName": { "type": "string", "maxLength": 100 },
+        "freelancerAvatar": { "type": "string", "maxLength": 500 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 4000 },
+        "price": { "type": "number" },
+        "deliveryTimeDays": { "type": "number" },
+        "sampleImages": { "type": "array" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "paused", "flagged"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "freelancerId", "title", "category", "price", "deliveryTimeDays"]
+    },
+    "Proposal": {
+      "title": "Proposal",
+      "description": "Proposal submitted by a freelancer for a job",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "jobId": { "type": "string", "maxLength": 128 },
+        "freelancerId": { "type": "string", "maxLength": 128 },
+        "freelancerName": { "type": "string", "maxLength": 100 },
+        "freelancerAvatar": { "type": "string", "maxLength": 500 },
+        "coverLetter": { "type": "string", "maxLength": 3000 },
+        "bidAmount": { "type": "number" },
+        "deliveryDays": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "jobId", "freelancerId", "bidAmount", "deliveryDays"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Escrow order between client and freelancer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "jobId": { "type": "string", "maxLength": 128 },
+        "serviceId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "clientId": { "type": "string", "maxLength": 128 },
+        "clientName": { "type": "string", "maxLength": 100 },
+        "freelancerId": { "type": "string", "maxLength": 128 },
+        "freelancerName": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "commissionRate": { "type": "number" },
+        "commissionAmount": { "type": "number" },
+        "freelancerEarnings": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "In Progress", "Delivered", "Revision", "Completed", "Cancelled"] },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "requirements": { "type": "string", "maxLength": 2000 },
+        "deliveryNotes": { "type": "string", "maxLength": 2000 },
+        "deliveryFiles": { "type": "array" },
+        "revisionNotes": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "clientId", "freelancerId", "amount", "status"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Chat thread between two users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "participants": { "type": "array" },
+        "participantDetails": { "type": "object" },
+        "lastMessage": { "type": "string", "maxLength": 1000 },
+        "lastMessageAt": { "type": "string" },
+        "orderId": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "participants"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Individual chat message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "conversationId": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "senderName": { "type": "string", "maxLength": 100 },
+        "senderAvatar": { "type": "string", "maxLength": 500 },
+        "text": { "type": "string", "maxLength": 2000 },
+        "fileUrl": { "type": "string", "maxLength": 500 },
+        "fileName": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "conversationId", "senderId", "text"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Feedback and rating for an order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "reviewerId": { "type": "string", "maxLength": 128 },
+        "reviewerName": { "type": "string", "maxLength": 100 },
+        "reviewerAvatar": { "type": "string", "maxLength": 500 },
+        "revieweeId": { "type": "string", "maxLength": 128 },
+        "revieweeName": { "type": "string", "maxLength": 100 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 2000 },
+        "role": { "type": "string", "enum": ["client", "freelancer"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "orderId", "reviewerId", "revieweeId", "rating", "comment"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial ledger entry for escrow, fee, or withdrawal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["escrow_deposit", "escrow_release", "commission", "withdrawal", "refund"] },
+        "amount": { "type": "number" },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["pending", "completed", "failed"] },
+        "description": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "type", "amount", "status"]
+    },
+    "Withdrawal": {
+      "title": "Withdrawal",
+      "description": "Withdrawal request by a freelancer to bKash, Nagad or Bank",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "method": { "type": "string", "enum": ["bKash", "Nagad", "Bank"] },
+        "accountNumber": { "type": "string", "maxLength": 50 },
+        "accountName": { "type": "string", "maxLength": 100 },
+        "bankName": { "type": "string", "maxLength": 100 },
+        "branch": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "fee": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string" },
+        "processedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "method", "accountNumber", "amount", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System or user alert notification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "enum": ["order", "proposal", "message", "payment", "system"] },
+        "link": { "type": "string", "maxLength": 200 },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "message", "type"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "User grievance or inappropriate content report",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "reporterId": { "type": "string", "maxLength": 128 },
+        "reporterName": { "type": "string", "maxLength": 100 },
+        "targetType": { "type": "string", "enum": ["user", "job", "service", "review"] },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "targetTitle": { "type": "string", "maxLength": 200 },
+        "reason": { "type": "string", "maxLength": 200 },
+        "details": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "action_taken", "dismissed"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "reporterId", "targetType", "targetId", "reason", "status"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Platform settings and configurations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "siteName": { "type": "string", "maxLength": 100 },
+        "commissionRate": { "type": "number" },
+        "announcement": { "type": "string", "maxLength": 500 },
+        "featuredFreelancerIds": { "type": "array" },
+        "isMaintenanceMode": { "type": "boolean" }
+      },
+      "required": ["id", "siteName", "commissionRate"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User accounts and authentication info"
+    },
+    "/profiles/{userId}": {
+      "schema": { "$ref": "#/entities/Profile" },
+      "description": "Public freelancer and client profiles"
+    },
+    "/jobs/{jobId}": {
+      "schema": { "$ref": "#/entities/Job" },
+      "description": "Posted jobs and projects"
+    },
+    "/services/{serviceId}": {
+      "schema": { "$ref": "#/entities/Service" },
+      "description": "Skill services offered by freelancers"
+    },
+    "/proposals/{proposalId}": {
+      "schema": { "$ref": "#/entities/Proposal" },
+      "description": "Proposals submitted on jobs"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Escrow orders and contracts"
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Chat threads between users"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Messages inside a conversation"
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Ratings and reviews for orders"
+    },
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Financial ledger transactions"
+    },
+    "/withdrawals/{withdrawalId}": {
+      "schema": { "$ref": "#/entities/Withdrawal" },
+      "description": "Withdrawal requests"
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "User notification stream"
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/Report" },
+      "description": "User reports and flags for moderation"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/Setting" },
+      "description": "Global platform settings"
+    }
+  }
+}
